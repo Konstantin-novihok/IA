@@ -1,0 +1,1 @@
+fastapi>=0.115,<1\nuvicorn[standard]>=0.30,<1\nfaster-whisper>=1.1,<2\nargostranslate>=1.9,<2\npydantic>=2.8,<3\npiper-tts>=1.2,<2\n
