@@ -18,3 +18,4 @@ videos/
 # Editors
 .vscode/
 .idea/
+\n# ProntoFix runtime data (never commit videos, models, transcripts or database)\ndata/\n

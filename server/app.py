@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse\nfrom fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 DATA=Path(os.getenv("PRONTOFIX_DATA","/data")).resolve()
@@ -12,7 +12,7 @@ UPLOADS=DATA/"uploads"; JOBS=DATA/"jobs"; DB=DATA/"prontofix.sqlite3"
 MODEL=os.getenv("WHISPER_MODEL","small"); THREADS=max(1,int(os.getenv("CPU_THREADS","4")))
 PIPER=os.getenv("PIPER_BIN","piper"); PIPER_MODEL=os.getenv("PIPER_MODEL","")
 LANGS={"uk":"Українська","ru":"Русский","de":"Deutsch","fr":"Français","it":"Italiano","en":"English","ar":"العربية","pt":"Português","es":"Español","bg":"Български","pl":"Polski","cs":"Čeština","sk":"Slovenčina","lt":"Lietuvių","lv":"Latviešu","no":"Norsk"}
-app=FastAPI(title="ProntoFix API",version="0.1.0")
+app=FastAPI(title="ProntoFix API",version="0.1.0")\nWEB_DIR=Path("/app/web")
 app.add_middleware(CORSMiddleware,allow_origins=os.getenv("CORS_ORIGINS","*").split(","),allow_credentials=False,allow_methods=["*"],allow_headers=["*"])
 
 def dbconn():
@@ -146,3 +146,4 @@ def edit(job_id:str,data:TranscriptEdit):
     path=j.get("result",{}).get("translated_transcript" if data.translated else "transcript")
     if not path:raise HTTPException(409,"Текст ещё не готов")
     Path(path).write_text(data.text,encoding="utf-8"); return {"status":"saved"}
+\nif WEB_DIR.is_dir():\n    app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")\n
